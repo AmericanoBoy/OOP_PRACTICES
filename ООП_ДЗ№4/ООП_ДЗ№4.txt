@@ -1,0 +1,482 @@
+
+#ЗАДАНИЕ №1
+
+from datetime import datetime
+
+
+class Book:
+    def __init__(self, title: str, author: str,year: int):
+        self.__title = self.valid_date_type_str(title)
+        self.__author = self.valid_all_name_author(author)
+        self.__year = self.valid_year(year)
+
+    @classmethod
+    def valid_date_type_str(self, date):
+        if not isinstance(date, str):
+            raise TypeError('ТИП ДАННЫХ ДОЛЖЕН БЫТЬ СТРОКОЙ, СОСТОЯЩЕЙ ИЗ БУКВ !')
+        return date
+
+    def valid_all_name_author(self, date):
+        if self.valid_date_type_str(date) == date:
+            if len([i for i in date.split()]) != 2:
+                raise ValueError("CТРОКА 'АВТОР' ДОЛЖНА СОДЕРЖАТЬ ИМЯ И ФАМИЛИЮ !")
+            return date
+
+    def valid_year(self, date):
+        if not isinstance(date, int):
+            raise TypeError('ГОД ИЗДАНИЯ ДОЛЖЕН БЫТЬ ЧИСЛОМ !')
+        if len(str(date)) < 4:
+            raise ValueError('ГОД ИЗДАНИЯ ДОЛЖЕН СОСТОЯТЬ ИЗ ЧЕТЫРЕХ ЦИФР !')
+        if date > datetime.now().year:
+            raise ValueError('УКАЗАННЫЙ ВАМ ГОД ЕЩЕ НЕ НАСТУПИЛ !')
+        return date
+
+    def bookmark_page(self, page: int):
+        print(f'Закладка в книге {self.__title} на {page} стрнице.')
+
+    def update_title(self, new_title: str):
+        if self.valid_date_type_str(new_title) == new_title:
+            old_title = self.__title
+            self.__title = new_title
+            print(f'Старое название книги: {old_title}. Новое названи книги: {self.__title}.')
+
+    def get_info(self):
+        return f'{self.__title}, {self.__author}, {self.__year}'
+
+
+    def __repr__(self):
+        return f'{self.__title} - {self.__author} ({self.__year})'
+
+
+class Library:
+    def __init__(self, name: str, address: str):
+        self.__name = Book.valid_date_type_str(name)
+        self.__address = self.valid_address(address)
+        self.__list_book = []
+
+    def valid_address(self, date):
+        if len(date.split()) != 3:
+            raise ValueError('УКАЗАН НЕВЕРНОЕ КОЛ-ВО ЭЛЕМЕНТОВ АДРЕСА!')
+        if date.split()[-1].isalpha() == True:
+            raise ValueError('НОМЕР ДОМА ДОЛЖЕН БЫТЬ ЦИФРОЙ!')
+        return date
+
+    def add_book(self, book: Book):
+        if book in self.__list_book:
+            raise ValueError('ДАННАЯ КНИГА УЖЕ ИМЕЕТСЯ В БИБЛИОТЕКЕ !')
+        self.__list_book.append(book)
+
+    def remove_book(self, book: Book):
+        if book not in self.__list_book:
+            raise ValueError('ДАННАЯ КНИГА ОТСУТСТВУЕТ В БИБЛИОТЕКЕ !')
+        self.__list_book.remove(book)
+
+    def show_list_book(self):
+        for i in self.__list_book:
+            print(i)
+
+    def search_book_by_title(self,title: str):
+        for i in self.__list_book:
+            if title in i.get_info().split(','):
+                return f'{i} имеется в картотеке библиотеки.'
+        return 'Искомой вами книги нет в картотеке библиотеки!'
+
+    def __repr__(self):
+        return f'{self.__name},{self.__address},{self.__list_book}'
+
+b=Book('Капитал','К. Маркс', 1949)
+b1=Book('Переписка Энгельса с Каутским', 'Ф. Энгельс', 1924)
+print(b.get_info())
+l=Library('Библиотека Научного Коммунизма','ул. Ленина 10')
+print(l)
+l.add_book(b)
+print(l)
+l.add_book(b1)
+print(l)
+l.show_list_book()
+print(l.search_book_by_title('Капитал'))
+print(l.search_book_by_title('1991. Реванш контры в страна обманутых дураков.'))
+
+#_________________________________________________________________________________________________________________________________________________________________________
+
+#ЗАДАНИЕ №2
+
+from datetime import datetime
+
+class Student:
+    def __init__(self, name: str, id: str ):
+        self.__name = self.valid_all_name(name)
+        self.__id = self.valid_date_type_str(id)
+        self.__grades = []
+
+    @classmethod
+    def valid_date_type_str(self, date):
+        if not isinstance(date, str):
+            raise TypeError('ТИП ДАННЫХ ДОЛЖЕН БЫТЬ ТИПА "int" !')
+        return date
+
+    @classmethod
+    def valid_all_name(self, date):
+        if self.valid_date_type_str(date) == date:
+            if len([i for i in date.split()]) != 2:
+                raise ValueError("CТРОКА  ДОЛЖНА СОДЕРЖАТЬ ИМЯ И ФАМИЛИЮ !")
+            return date
+
+    def get_profile(self):
+        return f'Студент: {self.__name}, id: {self.__id} .'
+
+    def assign_grade(self, grade: int):
+        if type(grade) is not int:
+            raise ValueError('ТИП ДАННЫХ ДОЛЖЕН БЫТЬ "int"!!!')
+        self.__grades.append(grade)
+
+    def __repr__(self):
+        return f'{self.__name}, {self.__id}'
+
+
+class Faculty:
+    def __init__(self, name: str):
+        self.__name = Student.valid_all_name(name)
+        self.__list_student = []
+
+    def enrol(self,student: Student):
+        if student in self.__list_student:
+            raise ValueError('ДАННЫЙ СТУДЕНТ УЖЕ ЕСТЬ В СПИСКЕ ЗАЧИСЛЕННЫХ НА ФАКУЛЬТЕТ!')
+        self.__list_student.append(student)
+
+    def graduate(self, student: Student):
+        if student not in self.__list_student:
+            raise ValueError('ДАННЫЙ СТУДЕНТ ОТСУТСТВУЕТ В СПИСКЕ ЗАЧИСЛЕННЫХ НА ФАКУЛЬТЕТ!')
+        self.__list_student.remove(student)
+
+    def show_list_student(self):
+        for i in self.__list_student:
+            print(i)
+
+    def find_student_by_id(self, id: str):
+        Student.valid_date_type_str(id)
+        for i in self.__list_student:
+            for j in i.get_profile().split(','):
+                for e in j.split():
+                    if id == e:
+                        return i
+        return None
+
+    def get_faculty(self):
+        return f'{self.__name}'
+
+    def __repr__(self):
+        return f'{self.__name}'
+
+class University:
+    def __init__(self, name: str):
+        self.__name = Student.valid_date_type_str(name)
+        self.__list_faculty = []
+
+    def add_faculty(self, f: Faculty):
+        if f in self.__list_faculty:
+            raise ValueError('ЭТОТ ФАКУЛЬТЕТ УЖЕ ИМЕЕТСЯ В УНИВЕРСИТЕТЕ!')
+        self.__list_faculty.append(f)
+
+    def remove_faculty(self, f: Faculty):
+        if f not in self.__list_faculty:
+            raise ValueError('ЭТОТ ФАКУЛЬТЕТ ОТСУТСТВУЕТ В УНИВЕРСИТЕТЕ!')
+        self.__list_faculty.remove(f)
+
+    def show_all_faculty(self):
+        for i in self.__list_faculty:
+            print(i)
+
+    def find_faculty(self, name: str):
+        for i in self.__list_faculty:
+            if name in i.get_faculty():
+                return i
+        return None
+
+s=Student('Федя Отличников','A1234')
+s1=Student('Петя Троечников','A5678')
+print(s)
+s.assign_grade(5)
+s1.assign_grade(3)
+f=Faculty('Закусочный Факультет')
+f1=Faculty('Факультет Пивопотребления')
+print(f)
+f.enrol(s)
+f.enrol(s1)
+f.show_list_student()
+print(f.find_student_by_id('A1234'))
+u=University('Университет Бесполезных Наук')
+u.add_faculty(f)
+u.add_faculty(f1)
+u.show_all_faculty()
+u.find_faculty('Факультет Пивопотребления')
+
+#__________________________________________________________________________________________________________________________________________________________________________
+
+#ЗАДАНИЕ №3
+
+class Engine:
+
+    lst_type_engine = ['бензиновый', 'дизельный', 'водородный']
+    lst_status_engine = ['работает', 'остановлен', 'на обслуживании']
+
+    def __init__(self, power: int, type: str):
+        self.__power = self.valid_power(power)
+        self.__type = self.valid_type_engine(type)
+        self.__condition = self.lst_status_engine[1]
+
+    @classmethod
+    def valid_date_int(self, date):
+        if not isinstance(date, int):
+            raise TypeError('ТИП ДАННЫХ ДОЛЖЕН БЫТЬ "int"!')
+        return date
+
+    def valid_power(self, date):
+        date = self.valid_date_int(date)
+        if date < 1:
+            raise ValueError('МОЩНОСТЬ ДОЛЖНА БЫТЬ БОЛЬШЕ НУЛЯ!')
+        return date
+
+    def valid_type_engine(self, date):
+        if not isinstance(date, str):
+            raise TypeError('ТИП ДАННЫХ ДОЛЖЕН БЫТЬ "str"!')
+        if date not in self.lst_type_engine:
+            raise ValueError('НЕДОПУСТИМЫЙ ТИП ДВИГАТЕЛЯ!')
+        return date
+
+    def ignite(self):
+        if self.__condition == self.lst_status_engine[1]:
+            self.__condition = self.lst_status_engine[0]
+        else:
+            type_error = ['уже работает',' находится на обслуживании'][self.__condition == self.lst_status_engine[-1]]
+            raise ValueError(f'двигатель {type_error}.')
+
+    def shutdown(self):
+        if self.__condition == self.lst_status_engine[0]:
+            self.__condition = self.lst_status_engine[1]
+        else:
+            type_error = ['был заглушен ранее','находится на обслуживании'][self.__condition == self.lst_status_engine[-1]]
+            raise ValueError(f'двигатель {type_error}.')
+
+    def service(self):
+        if self.__condition == self.lst_status_engine[1]:
+            self.__condition = self.lst_status_engine[-1]
+            return self.__condition
+        else:
+            type_error = ['сначала нужно заглушить','уже находится на обслуживании'][self.__condition == self.lst_status_engine[-1]]
+            raise ValueError(f'двигатель {type_error}')
+
+    def status(self):
+        return  self.__condition
+
+    def get_power(self):
+        return self.__power
+
+    def get_type(self):
+        return self.__type
+
+    def __repr__(self):
+        return f'{self.__power},{self.__type}'
+
+
+class Wheel:
+
+    lst_type_wheel = ['летняя', 'зимняя', 'всесезонная']
+
+    def __init__(self, size: int, type: str, engine: Engine):
+        self.__size = Engine.valid_date_int(size)
+        self.__type = self.control_valid_type(type)
+        self.__engine = engine
+        self.__pressure = 3.0
+
+    def control_valid_type(self, date):
+        if date not in self.lst_type_wheel:
+            raise ValueError('НЕСУЩЕСТВУЮЩИЙ ТИП ПОКРЫШЕК !')
+        return date
+
+    def rotate(self):
+        if self.__engine.status()=='работает':
+            print('колесесо вращается..')
+        else:
+            print('колесо не вращается...')
+
+    def inflate(self, pressure: float):
+        if pressure == self.__pressure :
+            raise ValueError('КОЛЕСО УЖЕ БЫЛО НАКАЧАНО РАНЕЕ ДО ЭТОГО ДАВЛЕНИЯ !')
+        if pressure < 3 or pressure > 10:
+            raise ValueError('НЕДОПУСТИМЫЙ УРОВЕН ДАВЛЕНИЯ В ПОКРЫШКЕ !')
+        self.__pressure = pressure
+
+    def deflate(self):
+        if self.__pressure == 3.0:
+            raise ValueError('КОЛЕСО УЖЕ БЫЛО СПУЩЕНО РАНЕЕ ДО МИНИМАЛЬНОГО ЗНАЧЕНИЯ !')
+        self.__pressure = 3.0
+
+    def get_size(self):
+        return self.__size
+
+    def get_type(self):
+        return self.__type
+
+    def get_pressure(self):
+        return self.__pressure
+
+    def __repr__(self):
+        return f'{self.__size},{self.__type}'
+
+class Car:
+    def __init__(self, brand: str, model: str, engine: Engine, wheels: list[Wheel]):
+        self.__brand = self.control_valid_type_str(brand)
+        self.__model = self.control_valid_type_str(model)
+        if len(wheels) != 4:
+            raise ValueError('КОЛЕС ДОЛЖНО БЫТЬ ЧЕТЫРЕ !')
+        self.__wheels = wheels
+        self.__engine = engine
+
+    def control_valid_type_str(self, date):
+        if not isinstance(date, str):
+            raise TypeError('ТИП ДАННЫХ ДОЛЖЕН БЫТЬ "str"!')
+        return date
+
+    def start(self):
+        if self.__engine.status() == self.__engine.lst_status_engine[1]:
+            c = 0
+            for i in self.__wheels:
+                c += (i.get_pressure() >= 3)
+            if c != 4:
+                raise ValueError('НАКАЧАЙТЕ КОЛЕСА ДО МИНИМАЛЬНО ДОПУСТИМЫХ ЗНАЧЕНИЙ!')
+            self.__engine.ignite()
+        else:
+            error = ['двигатель уже запущен','сначала отремонтируйте двигатель'][self.__engine.status() == self.__engine.lst_status_engine[-1]]
+            raise ValueError(error)
+
+    def stop(self):
+        if self.__engine.status() == self.__engine.lst_status_engine[0] :
+            self.__engine.shutdown()
+            print("Двигатель заглушен. Машина остановлена.")
+        else:
+            error = ['уже заглушен до этого', ' в ремонте'][self.__engine.status() == self.__engine.lst_status_engine[-1]]
+            print(f'Двигатель {error}')
+
+    def replace_wheel(self, idx: int, new_wheel: Wheel):
+        if Engine.valid_date_int(idx) == idx:
+            if idx >= 0 or idx <=3:
+                if new_wheel not in self.__wheels:
+                    self.__wheels[idx] = new
+                else:
+                    raise ValueError('Колесо уже заменено!')
+            else:
+                raise ValueError('Введит число от 0 до 3 !')
+
+    def get_specs(self):
+        return f"Марка: {self.__brand}, Модель: {self.__model}, Двигатель: {self.__engine.get_type()}, Мощность: {self.__engine.get_power()}."
+
+e=Engine(12,'бензиновый')
+print(e)
+
+w=Wheel(11,'летняя',e)
+print(w)
+w.rotate()
+w4=[w for i in range(4)]
+print(e.status())
+c=Car('уаз','469', e, w4)
+c.start()
+
+#_________________________________________________________________________________________________________________________________________________________________________
+
+#ЗАДАНИЕ№4
+
+from datetime import datetime
+class Client:
+
+    def __init__(self, client_id: str, name: str, email: str, orders: list[Order]):
+        self.__client_id = self.control_valid_date_str(client_id)
+        self.__name = self.control_valid_date_str(name)
+        self.__email = self.control_valid_date_str(email)
+        if len(orders) > len(set(orders)):
+            raise ValueError('ПРОВЕРТЕ НАЛИЧИЕ ДУБЛИКАТОВ В ЗАКАЗЕ!')
+        self.__orders = orders
+
+    def control_valid_date_str(self, date):
+        if not isinstance(date, str):
+            raise TypeError('ДАННЫЕ ДОЛЖНЫ БЫТЬ СТРОКОЙ!')
+        return date
+
+    def place_order(self, order: Order):
+        if order in self.__orders:
+            raise ValueError('ДАННЫЙ ЗАКАЗ ДОБАВЛЕН РАНЕЕ!')
+        self.__orders.append(order)
+
+    def get_client_id(self):
+        return self.__client_id
+
+    def get_name(self):
+        return self.__name
+
+    def get_email(self):
+        return self.__email
+
+    def get_orders(self):
+        return [i for i in self.__orders]
+
+class OrderItem:
+
+    def __init__(self, item_name: str, count: int):
+        self.__item_name = self.control_valid_str(item_name)
+        self.__count = self.control_valid_int(count)
+
+    def control_valid_str(self, date):
+        if not isinstance(date, str):
+            raise TypeError('ДАННЫЕ ДОЛЖНЫ БЫТЬ СТРОКОЙ ТИПА "str"!')
+        return date
+
+    def control_valid_int(self, date):
+        if not isinstance(date, int):
+            raise TypeErrorError('СЧЕТЧИК ДОЛЖЕН БЫТЬ ЦЕЛЫМ ЧИСЛОМ ТИПА "int"!')
+        if date < 1:
+            raise ValueError('СЧЕТЧИК НЕ МОЖЕТ БЫТЬ МЕНЬШЕ ЕДИНИЦЫ!')
+        return date
+
+    def add_item(self, other):
+        if self.__item_name == other.get_item_name:
+            self.__count += 1
+            return self.__item_name
+
+    def get_item_name(self):
+        return self.__item_name
+
+    def get_count(self):
+        return self.__count
+
+    def __repr__(self):
+        return f'{self.__item_name},{self.__count}'
+
+class Order:
+
+    def __init__(self, order_id: str, date: datetime.date, client: Client, items: list[OrderItem]):
+        self.__order_id = self.control_valid_str(order_id)
+        self.__date = date
+        self.__client = client
+        self.__items = items
+
+    def control_valid_str(self, date):
+        if not isinstance(date, str):
+            raise TypeError('ДАННЫЕ ДОЛЖНЫ БЫТЬ СТРОКОЙ ТИПА "str"!')
+        return date
+
+    def add_item(self, order: OrderItem):
+        if order.get_item_name() not in self.__items:
+            self.__items.append(order_item)
+
+    def get_order_id(self):
+        return self.__order_id
+
+    def get_date(self):
+        return self.__date
+
+    def get_clients(self):
+        return self.__client
+    
+    def get_summary(self) -> str:
+        return f"Зак. {self.__order_id} от {self.__date} для {self.__client.get_name()}."
+#__________________________________________________________________________________________________________________________________________________________________________
