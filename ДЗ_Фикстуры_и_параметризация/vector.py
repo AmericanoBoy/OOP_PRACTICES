@@ -133,6 +133,8 @@ class Vector:
         v.(рандом в диапазоне: 0,5)
         return: V(1,3,2)
         """
+        if max_d <= min_d:
+            raise ValueError('Выбран некорректный диапазон рандомных значений !')
         x = random.randint(min_d, max_d)
         y = random.randint(min_d, max_d)
         z = random.randint(min_d, max_d)
@@ -145,6 +147,8 @@ class Vector:
         v.(рандом в диапазоне: 0.5, 10.5)
         return: V(0.5, 3.2, 2.4)
         """
+        if max_d <= min_d:
+            raise ValueError('Выбран некорректный диапазон рандомных значений !')
         x = random.uniform(min_d, max_d)
         y = random.uniform(min_d, max_d)
         z = random.uniform(min_d, max_d)
