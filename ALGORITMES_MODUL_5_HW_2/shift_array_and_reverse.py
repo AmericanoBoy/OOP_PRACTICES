@@ -6,12 +6,12 @@ def control_input_data(array,shift_flag):
     if not isinstance(array, list): raise TypeError('ИТЕРИРУЕМЫМ ОБЪЕКТОМ ДОЛЖЕН БЫТЬ СПИСКОМ !')
     if len(array) == 0: raise ValueError('ВХОДНОЙ СПИСОК  НЕ ДОЛЖЕН БЫТЬ ПУСТЫМ !')
     if not isinstance(shift_flag, int): raise TypeError('ГРАНИЦА СДВИГА ДОЛЖНА БЫТЬ ЦЕЛЫМ ЧИСЛОМ !')
-    if shift_flag > len(array) or shift_flag < 0: raise ValueError('ДИАПАЗОНЫ ПОИСКА ДОЛЖНЫ БЫТЬ ДОПУСТИМЫМИ !')
+    if shift_flag > len(array) or shift_flag < 0: raise ValueError('ДИАПАЗОНЫ СДВИГА ДОЛЖНЫ БЫТЬ ДОПУСТИМЫМИ !')
 
 
 #cдвиг списка на 'n' позиций вправо и инверсия
 
-def shift_array_right_and_reverse(array, shift_flag):
+def shift_array_right_and_reverse(array: list, shift_flag: int) -> list:
     '''
     функция, cдвигающая список 'array' на 'shift_flag' позиций вправо,
     а затем инверсирует полученный список
@@ -77,6 +77,7 @@ def shift_array_left_and_reverse(array, shift_flag):
             array[len_array-count] = temp_variable
 
     return array
+
 
 
 
