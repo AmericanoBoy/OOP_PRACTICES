@@ -1,5 +1,4 @@
 
-
 # 'CПИСЫВАЛЬЩИКИ', НЕ ВОРУЕМ МОИ ИДЕИ, А ДУМАЕМ САМИ !!! А ЕСЛИ КОПИРУЕТЕ - ССЫЛКА НА ОРИГИНАЛ ОБЯЗАТЕЛЬНА !!!!
 
 def control_input_data(array):
@@ -61,3 +60,4 @@ def increase_number_list_by_one_without_control_iteration_element(array):
 #array =[9,9,9]
 
 #print(increase_number_list_by_one(array))
+
