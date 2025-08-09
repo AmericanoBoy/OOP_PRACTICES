@@ -5,12 +5,13 @@
 def control_input_data(array,start,end):
     if not isinstance(array, list): raise TypeError('ИТЕРИРУЕМЫМ ОБЪЕКТОМ ДОЛЖЕН БЫТЬ СПИСКОМ !')
     if len(array) == 0: raise ValueError('ВХОДНОЙ СПИСОК  НЕ ДОЛЖЕН БЫТЬ ПУСТЫМ !')
+    if not isinstance([start, end], int): raise TypeError('ИНДЕКСЫ ГРАНИЦ ПОИСКА ДОЛЖНЫ БЫТЬ ТИПОМ ДАННЫХ |int| !')
     if start < 0 or end > len(array): raise ValueError('ДИАПАЗОНЫ ПОИСКА ДОЛЖНЫ БЫТЬ ДОПУСТИМЫМИ !')
 
 def control_iteration_data(data):
     if not isinstance(data, (int, float)): raise TypeError('ЭЛЕМЕНТ ДОЛЖЕН БЫТЬ ЧИСЛОМ ТИПА: INT|FLOAT !')
 
-def max_in_range_between_start_and_end(array, start, end):
+def max_in_range_between_start_and_end(array: list, start: int, end: int) -> list:
     '''
     функция нахождения максимального числа и его абсолютной и относительной координаты в указанном диапазоне индексов списка
     возвращает список из трех элементов, где: первый- сам макс. элемент, второй- абсол. коорд., третий- относит. координата
@@ -34,4 +35,5 @@ def max_in_range_between_start_and_end(array, start, end):
     return lst_index_max_relative_and_absolut
 
 #array = [1,3,5,4,6,2,4,5,3]
+
 #print(max_in_range_between_start_and_end(array,2,6))
